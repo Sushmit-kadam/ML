@@ -1,1 +1,40 @@
+name: CI/CD Pipeline
 
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Fetch Sentiment Analysis Code
+      run: |
+        git clone https://github.com/your-username/sentiment-analysis.git
+      # Additional setup commands if needed
+
+    - name: Set Up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install Dependencies
+      run: |
+        pip install -r sentiment-analysis/requirements.txt
+      working-directory: ./  # This is the root of your repository
+
+    - name: Run Tests
+      run: |
+        python -m unittest discover sentiment-analysis/tests
+      working-directory: ./  # This is the root of your repository
+
+    - name: Deploy
+      run: |
+        # Your deployment command here
+        python sentiment-analysis/app.py
+      working-directory: ./  # This is the root of your repository
